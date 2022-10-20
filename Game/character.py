@@ -1,9 +1,6 @@
 from pico2d import *
 import game_framework
-import os
 
-path = os.getcwd() + "\Resource"
-os.chdir(path)
 
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
@@ -36,3 +33,4 @@ class Character:
                 self.animation = 4
     def draw(self):
         Character.image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
+
