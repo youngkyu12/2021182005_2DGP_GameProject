@@ -7,14 +7,16 @@ os.chdir(path)
 from character import Character
 from background import Background
 from object_throw import Object
+from enemy import Enemy
 
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
-Back = None
+back = None
 character = None
 running = None
 object = None
+enemy = None
 
 def handle_events():
     events = get_events()
@@ -51,28 +53,32 @@ def handle_events():
                 character.animation = 3
 
 def enter():
-    global Back, running, character, object
-    Back = Background()
+    global back, running, character, object, enemy
+    back = Background()
     character = Character()
     object = Object()
+    enemy = Enemy()
     running = True
 
 def exit():
-    global Back, running, character, object
-    del Back
+    global back, running, character, object, enemy
+    del back
     del character
     del object
+    del enemy
     running = False
 
 def update():
+    global enemy
     character.update()
     if object.throw_r == True or object.throw_l == True:
        object.update()
-
+    enemy.update()
 def draw():
     clear_canvas()
-    Back.draw()
+    back.draw()
     character.draw()
+    enemy.draw()
     if object.throw_r == True or object.throw_l == True:
         object.draw()
     update_canvas()

@@ -36,4 +36,3 @@ class Object:
         self.image.draw(self.x, self. y)
 
 
-character.Character().update()
