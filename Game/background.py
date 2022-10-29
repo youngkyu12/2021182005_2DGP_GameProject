@@ -10,15 +10,15 @@ class Background:
     ItemBox = None
     def __init__(self):     # 호출할 때마다 생성하게됨 조건문을 통해 단 한번의 이미지 로딩만 수행
         if Background.background == None:
-            self.background = load_image('Background_finalexam_1024x600.png')
+            Background.background = load_image('Background_finalexam_1024x600.png')
         if Background.hart == None:
-            self.hart = load_image('Hart.png')
+            Background.hart = load_image('Hart.png')
         if Background.font_item == None:
-            self.font_item = load_font('ENCR10B.TTF', 21)
+            Background.font_item = load_font('ENCR10B.TTF', 21)
         if Background.font_score == None:
-            self.font_score = load_font('ENCR10B.TTF', 15)
+            Background.font_score = load_font('ENCR10B.TTF', 15)
         if Background.ItemBox == None:
-            self.ItemBox = load_image('ItemBox.png')
+            Background.ItemBox = load_image('ItemBox.png')
 
     def draw(self):
         self.hart.draw(21, 720 - 21)
@@ -29,3 +29,22 @@ class Background:
         self.font_score.draw(1280 - 130, 720 - 40, "MyScore", (0, 0, 0))
         self.font_item.draw(1280 - 1024 - 130, 720 - 600 - 10 - 16, "Item", (0, 0, 0))
         self.ItemBox.draw(1280 - 1024 - 130 + 90, 720 - 600 - 32)
+
+back = None
+
+def enter():
+    global back
+    back = Background()
+
+def exit():
+    global back
+    del back
+
+def handle_events():
+    pass
+
+def update():
+    pass
+
+def draw():
+    back.draw()
