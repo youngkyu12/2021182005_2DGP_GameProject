@@ -19,7 +19,7 @@ def handle_events():
             game_framework.quit()
         else:
             character.handle_events(event)
-            object.handle_events(event)
+            object.handle_events(event, character.animation)
 
 
 
@@ -47,7 +47,7 @@ def exit():
 def update():
     character.update()
     if object.throw_r or object.throw_l:
-        object.update()
+        object.update(character.x, character.y)
     enemy.update()
 
 def draw():
@@ -65,3 +65,17 @@ def pasue():
 def resume():
     pass
 
+# test
+def test_self():
+    import main_state
+    import os
+
+    path = os.getcwd() + "\Resource"
+    os.chdir(path)
+
+    open_canvas(Width, Height)
+    game_framework.run(main_state)
+    close_canvas()
+
+if __name__ == '__main__':
+    test_self()
