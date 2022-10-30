@@ -18,23 +18,3 @@ class Enemy:
     def draw(self):
         if self.y >= 720 - 600:
             self.Bug.draw(self.x, self.y)
-
-
-enemy = None
-
-def enter():
-    global enemy
-    enemy = Enemy()
-
-def exit():
-    global enemy
-    del enemy
-
-def handle_events():
-    pass
-
-def update():
-    enemy.update()
-
-def draw():
-    enemy.draw()

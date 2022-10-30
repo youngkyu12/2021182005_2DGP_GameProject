@@ -30,21 +30,3 @@ class Background:
         self.font_item.draw(1280 - 1024 - 130, 720 - 600 - 10 - 16, "Item", (0, 0, 0))
         self.ItemBox.draw(1280 - 1024 - 130 + 90, 720 - 600 - 32)
 
-back = None
-
-def enter():
-    global back
-    back = Background()
-
-def exit():
-    global back
-    del back
-
-def handle_events():
-    pass
-
-def update():
-    pass
-
-def draw():
-    back.draw()

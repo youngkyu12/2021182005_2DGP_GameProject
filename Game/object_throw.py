@@ -35,27 +35,11 @@ class Object:
     def draw(self):
         self.image.draw(self.x, self. y)
 
-object = None
-def enter():
-    global object
-    object = Object()
-def exit():
-    global object
-    del object
-
-def handle_events():
-    events = get_events()
-    for event in events:
+    def handle_events(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_SPACE:
                 if character.animation == 5 or character.animation == 2:
-                    object.throw_l = True
+                    self.throw_l = True
                 elif character.animation == 4 or character.animation == 3:
-                    object.throw_r = True
-def update():
-    if (object.throw_r == True) or (object.throw_l == True):
-        object.update()
+                    self.throw_r = True
 
-def draw():
-    if (object.throw_r == True) or (object.throw_l == True):
-        object.draw()

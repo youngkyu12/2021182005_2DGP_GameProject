@@ -10,7 +10,7 @@ class Character:
     def __init__(self):
         self.x, self.y = 1280 - (1026 // 2) - 128 + 41, 720 - 600 + 48
         self.frame = 0
-        self.animation = 1
+        self.animation = 2
         self.dir_x = 0
         self.dir_y = 0
         if Character.image == None:
@@ -34,40 +34,27 @@ class Character:
     def draw(self):
         Character.image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
 
-character = None
-def enter():
-    global character
-    character = Character()
-
-def exit():
-    global character
-    del character
-
-def handle_events():
-    for event in events:
+    def handle_events(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_LEFT:
-                character.dir_x -= 1
-                character.animation = 5
+                self.dir_x -= 1
+                self.animation = 5
             elif event.key == SDLK_RIGHT:
-                character.dir_x += 1
-                character.animation = 4
+                self.dir_x += 1
+                self.animation = 4
             elif event.key == SDLK_UP:
-                if character.animation == 5 or character.animation == 2:
-                    character.animation = 0
-                elif character.animation == 4 or character.animation == 3:
-                    character.animation = 1
-                if character.dir_y == 0:
-                    character.dir_y += 1
+                if self.animation == 5 or self.animation == 2:
+                    self.animation = 0
+                elif self.animation == 4 or self.animation == 3:
+                    self.animation = 1
+                if self.dir_y == 0:
+                    self.dir_y += 1
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_LEFT:
-                character.dir_x += 1
-                character.animation = 2
+                self.dir_x += 1
+                self.animation = 2
             elif event.key == SDLK_RIGHT:
-                character.dir_x -= 1
-                character.animation = 3
-def update():
-    character.update()
+                self.dir_x -= 1
+                self.animation = 3
 
-def draw():
-    character.draw()
+
