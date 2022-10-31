@@ -54,7 +54,7 @@ def draw():
     clear_canvas()
     back.draw()
     character.draw()
-    if (object.throw_r == True) or (object.throw_l == True):
+    if object.throw_r or object.throw_l:
         object.draw()
     enemy.draw()
     update_canvas()
