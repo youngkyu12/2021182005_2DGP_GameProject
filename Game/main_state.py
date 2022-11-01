@@ -26,29 +26,30 @@ def handle_events():
 
 character = None
 object = None
-enemy = None
 back = None
+enemies = None
 def enter():
-    global object, enemy, character, back
+    global object, enemies, character, back
     object = Object()
     character = Character()
-    enemy = Enemy()
+    enemies = [Enemy()]
     back = Background()
     running = True
 
 def exit():
-    global object, enemy, character, back
+    global object, enemies, character, back
     del object
-    del enemy
+    del enemies
     del character
     del back
     running = False
 
 def update():
     character.update()
+    for enemy in enemies:
+        enemy.update()
     if object.throw_r or object.throw_l:
         object.update(character.x, character.y)
-    enemy.update()
 
 def draw():
     clear_canvas()
@@ -56,7 +57,8 @@ def draw():
     character.draw()
     if object.throw_r or object.throw_l:
         object.draw()
-    enemy.draw()
+    for enemy in enemies:
+        enemy.draw()
     update_canvas()
 
 def pasue():
@@ -64,6 +66,9 @@ def pasue():
 
 def resume():
     pass
+
+def add():
+    enemies.append(Enemy())
 
 # test
 def test_self():
