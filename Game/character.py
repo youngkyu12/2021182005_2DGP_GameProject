@@ -5,7 +5,7 @@ import game_framework
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
-RD, LD, JD, RU, LU, JU = range(6)
+RD, LD, JD, RU, LU, JU, SD = range(7)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RD,
@@ -13,7 +13,9 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_UP): JD,
     (SDL_KEYUP, SDLK_RIGHT): RU,
     (SDL_KEYUP, SDLK_LEFT): LU,
-    (SDL_KEYUP, SDLK_UP): JU
+    (SDL_KEYUP, SDLK_UP): JU,
+    (SDL_KEYDOWN, SDLK_DOWN): SD
+
 }
 
 
@@ -55,15 +57,25 @@ next_state = {
 
 
 class Character:
-    image = None
+    char_image = None
+    object_image = None
     def __init__(self):
         self.x, self.y = 1280 - (1026 // 2) - 128 + 41, 720 - 600 + 48
+        self.throw_x, self.throw_y = Width // 2, Height // 2
         self.frame = 0
         self.animation = 2
         self.dir_x = 0
         self.dir_y = 0
-        if Character.image == None:
-            Character.image = load_image("character_anime.png")
+        self.xl, self.yl = 1280 - 1024 - 128, 720 - 600 + 100
+        self.xr, self.yr = 1280 - 128, 720 - 600 + 100
+        self.throw_l = False
+        self.throw_r = False
+        self.i = 0
+        self.t = 0
+        if Character.char_image == None:
+            Character.char_image = load_image("character_anime.png")
+        if Character.object_image == None:
+            Character.object_image = load_image('target_1_32x32.png')
 
         self.q = []
         self.cur_state = IDLE
@@ -77,6 +89,19 @@ class Character:
             self.cur_state = next_state[self.cur_state][event]
             self.cur_state.enter()
 
+        # self.t = self.i / 100
+        # if self.throw_l:
+        #     self.throw_x = (2 * self.t ** 2 - 3 * self.t + 1) * self.x + (-4 * self.t ** 2 + 4 * self.t) * (self.x -((self.x - self.xl) // 2)) + (2 * self.t ** 2 - self.t) * self.xl
+        #     self.throw_y = (2 * self.t ** 2 - 3 * self.t + 1) * self.y + (-4 * self.t ** 2 + 4 * self.t) * (self.y + 100) + (2 * self.t ** 2 - self.t) * self.yl
+        # elif self.throw_r:
+        #     self.throw_x = (2 * self.t ** 2 - 3 * self.t + 1) * self.x + (-4 * self.t ** 2 + 4 * self.t) * (self.x + ((self.xr - self.x) // 2)) + (2 * self.t ** 2 - self.t) * self.xr
+        #     self.throw_y = (2 * self.t ** 2 - 3 * self.t + 1) * self.y + (-4 * self.t ** 2 + 4 * self.t) * (self.y + 100) + (2 * self.t ** 2 - self.t) * self.yr
+        #
+        # self.i += 4
+        # if self.i > 100:
+        #     self.i = 0
+        #     self.throw_r = False
+        #     self.throw_l = False
         # self.x += self.dir_x * 5
         # self.y += self.dir_y * 5
         # if self.animation == 4 or self.animation == 5:
@@ -91,11 +116,13 @@ class Character:
         #         self.animation = 5
         #     elif self.animation == 1:
         #         self.animation = 4
-        
+
     def draw(self):
         self.cur_state.draw()
 
-        # Character.image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
+        # Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
+        # if self.throw_r or self.throw_l:
+        #     Character.object_image.draw(self.throw_x, self.throw_y)
 
     def handle_events(self, event):
         if (event.type, event.key) in key_event_table:
@@ -116,6 +143,11 @@ class Character:
         #             self.animation = 1
         #         if self.dir_y == 0:
         #             self.dir_y += 1
+        #     elif event.key == SDLK_SPACE:
+        #         if self.animation == 5 or self.animation == 2:
+        #             self.throw_l = True
+        #         elif self.animation == 4 or self.animation == 3:
+        #             self.throw_r = True
         # elif event.type == SDL_KEYUP:
         #     if event.key == SDLK_LEFT:
         #         self.dir_x += 1
