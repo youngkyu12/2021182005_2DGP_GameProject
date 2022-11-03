@@ -5,7 +5,7 @@ import game_framework
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
-RD, LD, JD, RU, LU, JU, SD = range(7)
+RD, LD, JD, RU, LU = range(5)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RD,
@@ -13,46 +13,112 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_UP): JD,
     (SDL_KEYUP, SDLK_RIGHT): RU,
     (SDL_KEYUP, SDLK_LEFT): LU,
-    (SDL_KEYUP, SDLK_UP): JU,
-    (SDL_KEYDOWN, SDLK_DOWN): SD
-
 }
 
 
 
 
 class IDLE:
-    def enter():
+    def enter(self, event):
         print('ENTER IDLE')
+        self.dir_x = 0
+        self.dir_y = 0
+        self.frame = 0
+        if self.animation == 5:
+            self.animation = 2
+        elif self.animation == 4:
+            self.animation = 3
         pass
 
-    def exit():
+    def exit(self):
         print('EXIT IDLE')
         pass
 
-    def do():
+    def do(self):
         pass
 
-    def draw():
+    def draw(self):
+        Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
         pass
 
 class RUN:
-    def enter():
+    def enter(self, event):
         print('ENTER RUN')
+        if event == RD:
+            self.dir_x += 1
+            self.animation = 4
+        elif event == LD:
+            self.dir_x -= 1
+            self.animation = 5
+        elif event == RU:
+            self.dir_x -= 1
+            self.animation = 3
+        elif event == LU:
+            self.dir_x += 1
+            self.animation = 2
 
-    def exit():
+
+    def exit(self):
         print('EXIT RUN')
 
-    def do():
+    def do(self):
+        self.frame = (self.frame + 1) % 5
+        self.x += self.dir_x * 5
+        self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
+
         pass
 
-    def draw():
+    def draw(self):
+        Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
         pass
 
+class JUMP:
+    def enter(self, event):
+        print('ENTER Jump')
+        if event == JD:
+            self.dir_y += 1
+            if self.animation == 5 or self.animation == 2:
+                self.animation = 0
+            elif self.animation == 4 or self.animation == 3:
+                self.animation = 1
+
+    def exit(self):
+        print('EXIT Jump')
+
+    def do(self):
+        self.y += self.dir_y * 5
+        if self.y > 720 - 600 + 48 + 100:
+            self.dir_y -= 1
+        elif self.y < 720 - 600 + 48:
+            self.dir_y = 0
+            if self.animation == 0:
+                self.animation = 5
+            elif self.animation == 1:
+                self.animation = 4
+        pass
+
+    def draw(self):
+        Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
+
+        pass
+class THROW:
+    def enter(self, event):
+        print('ENTER Throw')
+
+    def exit(self):
+        print('EXIT Throw')
+
+    def do(self):
+        pass
+
+    def draw(self):
+        pass
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, JU: RUN, RD: RUN, LD: RUN, JD: RUN},
-    RUN: {RU: IDLE, LU: IDLE, JU: IDLE, RD: IDLE, LD: IDLE, JD: IDLE}
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, JD: JUMP},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, JD: JUMP},
+    JUMP: {RU: RUN, LU: RUN, RD: RUN, LD: RUN}
+
 }
 
 
@@ -79,15 +145,15 @@ class Character:
 
         self.q = []
         self.cur_state = IDLE
-        self.cur_state.enter()
+        self.cur_state.enter(self, None)
     def update(self):
-        self.cur_state.do()
+        self.cur_state.do(self)
 
         if self.q:
             event = self.q.pop()
-            self.cur_state.exit()
+            self.cur_state.exit(self)
             self.cur_state = next_state[self.cur_state][event]
-            self.cur_state.enter()
+            self.cur_state.enter(self, event)
 
         # self.t = self.i / 100
         # if self.throw_l:
@@ -118,16 +184,18 @@ class Character:
         #         self.animation = 4
 
     def draw(self):
-        self.cur_state.draw()
+        self.cur_state.draw(self)
 
         # Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
         # if self.throw_r or self.throw_l:
         #     Character.object_image.draw(self.throw_x, self.throw_y)
 
+    def add_event(self, event):
+        self.q.insert(0, event)
     def handle_events(self, event):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
-            self.q.insert(0, key_event)
+            self.add_event(key_event)
 
         # if event.type == SDL_KEYDOWN:
         #     if event.key == SDLK_LEFT:
