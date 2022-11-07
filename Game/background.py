@@ -20,6 +20,8 @@ class Background:
         if Background.ItemBox == None:
             Background.ItemBox = load_image('ItemBox.png')
 
+    def update(self):
+        pass
     def draw(self):
         self.hart.draw(21, 720 - 21)
         self.hart.draw(21 + 42 + 1, 720 - 21)

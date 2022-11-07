@@ -1,10 +1,10 @@
 from pico2d import *
 import game_framework
+import game_world
 
-from object_throw import Object
 from character import Character
 from background import Background
-from enemy import Enemy
+# from enemy import Enemy
 
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
@@ -19,46 +19,56 @@ def handle_events():
             game_framework.quit()
         else:
             character.handle_events(event)
-            object.handle_events(event, character.animation)
+            # object.handle_events(event, character.animation)
 
 
 
 
 character = None
-object = None
+# throw = None
 back = None
-enemies = None
+# enemies = None
 def enter():
-    global object, enemies, character, back
-    object = Object()
+    global character, back
     character = Character()
-    enemies = [Enemy()]
+    # enemies = Enemy()
     back = Background()
-    running = True
+    game_world.add_object(character, 1)
+    game_world.add_object(back, 0)
+    # game_world.add_object(enemies, 1)
+    # running = True
 
 def exit():
-    global object, enemies, character, back
-    del object
-    del enemies
-    del character
-    del back
-    running = False
+    game_world.clear()
+    # global enemies, character, back
+    # del enemies
+    # del character
+    # del back
+    # running = False
 
 def update():
-    character.update()
-    for enemy in enemies:
-        enemy.update()
-    if object.throw_r or object.throw_l:
-        object.update(character.x, character.y)
+    for game_object in game_world.all_objects():
+        game_object.update()
+    # character.update()
+    # for enemy in enemies:
+    #     enemy.update()
+    # if throw != None:
+    #     throw.update()
+    # if object.throw_r or object.throw_l:
+    #     object.update(character.x, character.y)
 
 def draw():
     clear_canvas()
-    back.draw()
-    character.draw()
-    if object.throw_r or object.throw_l:
-        object.draw()
-    for enemy in enemies:
-        enemy.draw()
+    for game_object in game_world.all_objects():
+        game_object.draw()
+    # back.draw()
+    # character.draw()
+    # if throw != None:
+    #     throw.draw()
+    # # if object.throw_r or object.throw_l:
+    # #     object.draw()
+    # for enemy in enemies:
+    #     enemy.draw()
     update_canvas()
 
 def pasue():
@@ -66,9 +76,6 @@ def pasue():
 
 def resume():
     pass
-
-def add():
-    enemies.append(Enemy())
 
 # test
 def test_self():
