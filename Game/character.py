@@ -6,12 +6,13 @@ from throw import Throw
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
-RD, LD, RU, LU, SPACE = range(5)
+RD, LD, RU, LU, SPACE, JU, JD = range(7)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_SPACE): SPACE,
     (SDL_KEYDOWN, SDLK_RIGHT): RD,
     (SDL_KEYDOWN, SDLK_LEFT): LD,
+    (SDL_KEYDOWN, SDLK_UP): JD,
     (SDL_KEYUP, SDLK_RIGHT): RU,
     (SDL_KEYUP, SDLK_LEFT): LU,
 }
@@ -24,19 +25,24 @@ class IDLE:
         print('ENTER IDLE')
         self.dir_x = 0
         self.dir_y = 0
-        if self.animation == 5:
-            self.animation = 2
-        elif self.animation == 4:
-            self.animation = 3
-        # elif self.animation == 0:
-        #     self.animation = 2
-        # elif self.animation == 1:
-        #     self.animation = 3
+        if self.action == 5:
+            self.action = 2
+        elif self.action == 4:
+            self.action = 3
+        # elif self.action == 0:
+        #     self.action = 2
+        # elif self.action == 1:
+        #     self.action = 3
 
     def exit(self, event):
         print('EXIT IDLE')
         if event == SPACE:
             self.THROW()
+        if event == JD:
+            if self.action == 2:
+                self.action = 0
+            elif self.action == 3:
+                self.action = 1
 
     def do(self):
         self.frame = 0
@@ -44,30 +50,41 @@ class IDLE:
         pass
 
     def draw(self):
-        Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
+        Character.char_image.clip_draw(self.frame * 82, self.action * 100, 82, 96, self.x, self.y)
         pass
 
 class RUN:
     def enter(self, event):
         print('ENTER RUN')
-        if event == RD:
-            self.dir_x += 1
-            self.animation = 4
-        elif event == LD:
-            self.dir_x -= 1
-            self.animation = 5
-        elif event == RU:
-            self.dir_x -= 1
-            self.animation = 3
-        elif event == LU:
-            self.dir_x += 1
-            self.animation = 2
-        # elif event == JD:
-        #     self.dir_y += 1
-        #     if self.animation == 5 or self.animation == 2:
-        #         self.animation = 0
-        #     elif self.animation == 4 or self.animation == 3:
-        #         self.animation = 1
+        if event == JD or self.dir_y == 1 or self.dir_y == -1:
+            if event == RD:
+                self.dir_x += 1
+                self.action = 1
+            elif event == LD:
+                self.dir_x -= 1
+                self.action = 0
+            elif event == RU:
+                self.dir_x -= 1
+            elif event == LU:
+                self.dir_x += 1
+            self.dir_y = 1
+            if self.action == 5 or self.action == 2:
+                self.action = 0
+            elif self.action == 4 or self.action == 3:
+                self.action = 1
+        else:
+            if event == RD:
+                self.dir_x += 1
+                self.action = 4
+            elif event == LD:
+                self.dir_x -= 1
+                self.action = 5
+            elif event == RU:
+                self.dir_x -= 1
+                self.action = 3
+            elif event == LU:
+                self.dir_x += 1
+                self.action = 2
 
     def exit(self, event):
         print('EXIT RUN')
@@ -75,71 +92,28 @@ class RUN:
             self.THROW()
 
     def do(self):
-        # if self.animation == 4 or 5:
-        self.frame = (self.frame + 1) % 5
-        # elif self.animation == 0 or 1:
-        #     self.frame = 0
+        if self.action == 4 or self.action == 5:
+            self.frame = (self.frame + 1) % 5
+        elif self.action == 0 or self.action == 1:
+            self.frame = 0
         self.x += self.dir_x * 5
+        self.y += self.dir_y * 5
         self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
-        # self.y += self.dir_y * 5
-        # if self.y > 720 - 600 + 48 + 100:
-        #     self.dir_y -= 1
-        # elif self.y < 720 - 600:
-        #     self.dir_y = 0
-        #     if self.animation == 0:
-        #         self.animation = 5
-        #     elif self.animation == 1:
-        #         self.animation = 4
-
+        if self.y > 720 - 600 + 48 + 100:
+            self.dir_y = -1
+        if self.y < 720 - 600 + 49:
+            self.dir_y = 0
+            if self.dir_x == 0:
+                self.add_event(JU)
 
     def draw(self):
-        Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
+        Character.char_image.clip_draw(self.frame * 82, self.action * 100, 82, 96, self.x, self.y)
         pass
 
-# class JUMP:
-#     def enter(self, event):
-#         print('ENTER Jump')
-#         if event == JD:
-#             self.dir_y += 1
-#             if self.animation == 5 or self.animation == 2:
-#                 self.animation = 0
-#             elif self.animation == 4 or self.animation == 3:
-#                 self.animation = 1
-#         if event == RD:
-#             self.dir_x += 1
-#             self.animation = 1
-#         elif event == LD:
-#             self.dir_x -= 1
-#             self.animation = 0
-#         elif event == RU:
-#             self.dir_x -= 1
-#         elif event == LU:
-#             self.dir_x += 1
-#
-#     def exit(self, event):
-#         print('EXIT Jump')
-#
-#     def do(self):
-#         self.x += self.dir_x * 5
-#         self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
-#         self.y += self.dir_y * 5
-#         if self.y > 720 - 600 + 48 + 100:
-#             self.dir_y -= 1
-#         elif self.y < 720 - 600 + 48:
-#             self.add_event(STOP)
-#
-#
-#         pass
-#
-#     def draw(self):
-#         Character.char_image.clip_draw(self.frame * 82, self.animation * 100, 82, 96, self.x, self.y)
-#
-#         pass
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN}
-    # JUMP: {RU: JUMP, LU: JUMP, RD: JUMP, LD: JUMP, STOP: IDLE}
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: RUN},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, JD: RUN, JU: IDLE}
 }
 
 
@@ -149,7 +123,7 @@ class Character:
     def __init__(self):
         self.x, self.y = 1280 - (1026 // 2) - 128 + 41, 720 - 600 + 48
         self.frame = 0
-        self.animation = 2
+        self.action = 2
         self.dir_x = 0
         self.dir_y = 0
         if Character.char_image == None:
@@ -187,6 +161,6 @@ class Character:
 
     def THROW(self):
         print('THROW')
-        throw = Throw(self.x, self.y, self.animation)
+        throw = Throw(self.x, self.y, self.action)
         game_world.add_object(throw, 1)
 
