@@ -15,121 +15,107 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_UP): JD,
     (SDL_KEYUP, SDLK_RIGHT): RU,
     (SDL_KEYUP, SDLK_LEFT): LU,
+    (SDL_KEYUP, SDLK_UP): JU
 }
-
-
-
 
 class IDLE:
     def enter(self, event):
         print('ENTER IDLE')
         self.dir_x = 0
-        self.dir_y = 0
-        if self.action == 5:
-            self.action = 2
-        elif self.action == 4:
-            self.action = 3
-
+        if event == JD:
+            self.dir_Idle_y = 1
     def exit(self, event):
         print('EXIT IDLE')
+        self.dir_Run_y = self.dir_Idle_y
         if event == SPACE:
             self.THROW()
-        if event == JD:
-            if self.action == 2:
-                self.action = 0
-            elif self.action == 3:
-                self.action = 1
 
     def do(self):
         self.frame = 0
-
-        pass
-
+        self.y += self.dir_Idle_y * 5
+        if self.y > 720 - 600 + 50 + 100:
+            self.dir_Idle_y = -1
+        if self.y < 720 - 600 + 49:
+            self.dir_Idle_y = 0
     def draw(self):
-        Character.char_image.clip_draw(self.frame * 82, self.action * 100, 82, 96, self.x, self.y)
-        pass
+        if self.dir_face == 1 and self.dir_Idle_y == 0:
+            Character.char_image.clip_draw(self.frame * 82, 3 * 100, 82, 96, self.x, self.y)
+        elif self.dir_face != 1 and self.dir_Idle_y == 0:
+            Character.char_image.clip_draw(self.frame * 82, 2 * 100, 82, 96, self.x, self.y)
+        elif self.dir_face == 1 and self.dir_Idle_y != 0:
+            Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
+        elif self.dir_face != 1 and self.dir_Idle_y != 0:
+            Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
 
 class RUN:
     def enter(self, event):
         print('ENTER RUN')
-        if event == JD or self.dir_y == 1 or self.dir_y == -1:
-            if event == RD:
-                self.dir_x += 1
-                self.action = 1
-            elif event == LD:
-                self.dir_x -= 1
-                self.action = 0
-            elif event == RU:
-                self.dir_x -= 1
-            elif event == LU:
-                self.dir_x += 1
-            self.dir_y = 1
-            if self.action == 5 or self.action == 2:
-                self.action = 0
-            elif self.action == 4 or self.action == 3:
-                self.action = 1
-        else:
-            if event == RD:
-                self.dir_x += 1
-                self.action = 4
-            elif event == LD:
-                self.dir_x -= 1
-                self.action = 5
-            elif event == RU:
-                self.dir_x -= 1
-                self.action = 3
-            elif event == LU:
-                self.dir_x += 1
-                self.action = 2
+        if event == RD:
+            self.dir_x += 1
+        elif event == LD:
+            self.dir_x -= 1
+        elif event == RU:
+            self.dir_x -= 1
+        elif event == LU:
+            self.dir_x += 1
+        elif event == JD:
+            self.dir_Run_y = 1
 
     def exit(self, event):
         print('EXIT RUN')
+        self.dir_face = self.dir_x
+        self.dir_Idle_y = self.dir_Run_y
         if event == SPACE:
             self.THROW()
 
     def do(self):
-        if self.action == 4 or self.action == 5:
-            self.frame = (self.frame + 1) % 5
-        elif self.action == 0 or self.action == 1:
-            self.frame = 0
+        self.frame = (self.frame + 1) % 5
         self.x += self.dir_x * 5
-        self.y += self.dir_y * 5
+        self.y += self.dir_Run_y * 5
+        if self.y > 720 - 600 + 50 + 100:
+            self.dir_Run_y = -1
+        if self.y < 720 - 600 + 50:
+            self.dir_Run_y = 0
         self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
-        if self.y > 720 - 600 + 48 + 100:
-            self.dir_y = -1
-        if self.y < 720 - 600 + 49:
-            self.dir_y = 0
-            if self.dir_x == 0:
-                self.add_event(JU)
 
     def draw(self):
-        Character.char_image.clip_draw(self.frame * 82, self.action * 100, 82, 96, self.x, self.y)
-        pass
-
+        if self.dir_x == -1 and self.dir_Run_y == 0:
+            Character.char_image.clip_draw(self.frame * 82, 5 * 100, 82, 96, self.x, self.y)
+        elif self.dir_x == 1 and self.dir_Run_y == 0:
+            Character.char_image.clip_draw(self.frame * 82, 4 * 100, 82, 96, self.x, self.y)
+        elif self.dir_x == -1 and self.dir_Run_y != 0:
+            Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
+        elif self.dir_x == 1 and self.dir_Run_y != 0:
+            Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: RUN},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, JD: RUN, JU: IDLE}
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: IDLE, JU: IDLE},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, JD: RUN, JU: RUN}
 }
 
 
 class Character:
     char_image = None
     object_image = None
+
     def __init__(self):
         self.x, self.y = 1280 - (1026 // 2) - 128 + 41, 720 - 600 + 48
         self.frame = 0
         self.action = 2
+        self.dir_face = 0
         self.dir_x = 0
-        self.dir_y = 0
+        self.dir_Idle_y = 0
+        self.dir_Run_y = 0
         if Character.char_image == None:
             Character.char_image = load_image("character_anime.png")
+
         if Character.object_image == None:
             Character.object_image = load_image('target_1_32x32.png')
 
         self.q = []
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
+
     def update(self):
         self.cur_state.do(self)
 
@@ -145,7 +131,7 @@ class Character:
     def draw(self):
         self.cur_state.draw(self)
         debug_print('PPPP')
-        debug_print(f' Dir_x: {self.dir_x}, Dir_y: {self.dir_y}')
+        debug_print(f' Dir_x: {self.dir_x}, Dir_Idle_y: {self.dir_Idle_y}, Dir_Run_y: {self.dir_Run_y}')
 
     def add_event(self, event):
         self.q.insert(0, event)
