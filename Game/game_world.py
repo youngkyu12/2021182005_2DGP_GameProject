@@ -7,6 +7,7 @@ def add_object(o, depth):
 def add_objects(ol, depth):
     objects[depth] += ol
 
+
 def remove_object(o):
     for layer in objects:
         if o in layer:

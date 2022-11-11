@@ -30,6 +30,7 @@ enemies1 = None
 enemies2 = None
 task1 = None
 task2 = None
+
 def enter():
     global character, back, enemies1, enemies2, task1, task2
     character = Character()

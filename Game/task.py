@@ -16,8 +16,7 @@ class Task1:
             game_world.remove_object(self)
 
     def draw(self):
-        if self.y >= 720 - 600:
-            self.Bug.draw(self.x, self.y)
+        self.task1.draw(self.x, self.y)
 
 class Task2:
     def __init__(self):
@@ -30,4 +29,4 @@ class Task2:
             game_world.remove_object(self)
 
     def draw(self):
-            self.Task2.draw(self.x, self.y)
+        self.task2.draw(self.x, self.y)
