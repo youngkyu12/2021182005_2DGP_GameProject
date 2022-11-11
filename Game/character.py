@@ -29,10 +29,6 @@ class IDLE:
             self.action = 2
         elif self.action == 4:
             self.action = 3
-        # elif self.action == 0:
-        #     self.action = 2
-        # elif self.action == 1:
-        #     self.action = 3
 
     def exit(self, event):
         print('EXIT IDLE')
