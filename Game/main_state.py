@@ -7,6 +7,7 @@ from background import Background
 from enemy import *
 from task import *
 
+
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
@@ -74,6 +75,7 @@ def test_self():
 
     path = os.getcwd() + "\Resource"
     os.chdir(path)
+
 
     open_canvas(Width, Height)
     game_framework.run(main_state)

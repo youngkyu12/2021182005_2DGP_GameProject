@@ -23,7 +23,9 @@ class IDLE:
         print('ENTER IDLE')
         self.dir_x = 0
         if event == JD:
-            self.dir_Idle_y = 1
+            if self.dir_Idle_y == 0:
+                self.dir_Idle_y = 1
+
     def exit(self, event):
         print('EXIT IDLE')
         self.dir_Run_y = self.dir_Idle_y
@@ -33,19 +35,22 @@ class IDLE:
     def do(self):
         self.frame = 0
         self.y += self.dir_Idle_y * 5
-        if self.y > 720 - 600 + 50 + 100:
+        if self.y > Height - bg_Height + 50 + 100:
             self.dir_Idle_y = -1
-        if self.y < 720 - 600 + 49:
+        if self.y < Height - bg_Height + 49:
             self.dir_Idle_y = 0
+
     def draw(self):
-        if self.dir_face == 1 and self.dir_Idle_y == 0:
-            Character.char_image.clip_draw(self.frame * 82, 3 * 100, 82, 96, self.x, self.y)
-        elif self.dir_face != 1 and self.dir_Idle_y == 0:
-            Character.char_image.clip_draw(self.frame * 82, 2 * 100, 82, 96, self.x, self.y)
-        elif self.dir_face == 1 and self.dir_Idle_y != 0:
-            Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
-        elif self.dir_face != 1 and self.dir_Idle_y != 0:
-            Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
+        if self.dir_Idle_y == 0:
+            if self.dir_face == 1:
+                Character.char_image.clip_draw(self.frame * 82, 3 * 100, 82, 96, self.x, self.y)
+            elif self.dir_face != 1:
+                Character.char_image.clip_draw(self.frame * 82, 2 * 100, 82, 96, self.x, self.y)
+        elif self.dir_Idle_y != 0:
+            if self.dir_face == 1:
+                Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
+            elif self.dir_face != 1:
+                Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
 
 class RUN:
     def enter(self, event):
@@ -59,7 +64,8 @@ class RUN:
         elif event == LU:
             self.dir_x += 1
         elif event == JD:
-            self.dir_Run_y = 1
+            if self.dir_Run_y == 0:
+                self.dir_Run_y = 1
 
     def exit(self, event):
         print('EXIT RUN')
@@ -69,24 +75,30 @@ class RUN:
             self.THROW()
 
     def do(self):
-        self.frame = (self.frame + 1) % 5
+        if self.dir_Run_y == 0:
+            self.frame = (self.frame + 1) % 5
+        elif self.dir_Run_y != 0:
+            self.frame = 0
         self.x += self.dir_x * 5
         self.y += self.dir_Run_y * 5
-        if self.y > 720 - 600 + 50 + 100:
-            self.dir_Run_y = -1
-        if self.y < 720 - 600 + 50:
-            self.dir_Run_y = 0
         self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
+        if self.y > Height - bg_Height + 50 + 100:
+            self.dir_Run_y = -1
+        if self.y < Height - bg_Height + 50:
+            self.dir_Run_y = 0
+
 
     def draw(self):
-        if self.dir_x == -1 and self.dir_Run_y == 0:
-            Character.char_image.clip_draw(self.frame * 82, 5 * 100, 82, 96, self.x, self.y)
-        elif self.dir_x == 1 and self.dir_Run_y == 0:
-            Character.char_image.clip_draw(self.frame * 82, 4 * 100, 82, 96, self.x, self.y)
-        elif self.dir_x == -1 and self.dir_Run_y != 0:
-            Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
-        elif self.dir_x == 1 and self.dir_Run_y != 0:
-            Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
+        if self.dir_Run_y == 0:
+            if self.dir_x == -1:
+                Character.char_image.clip_draw(self.frame * 82, 5 * 100, 82, 96, self.x, self.y)
+            elif self.dir_x == 1:
+                Character.char_image.clip_draw(self.frame * 82, 4 * 100, 82, 96, self.x, self.y)
+        elif self.dir_Run_y != 0:
+            if self.dir_x == -1:
+                Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
+            elif self.dir_x == 1:
+                Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
 
 next_state = {
     IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: IDLE, JU: IDLE},
@@ -99,7 +111,7 @@ class Character:
     object_image = None
 
     def __init__(self):
-        self.x, self.y = 1280 - (1026 // 2) - 128 + 41, 720 - 600 + 48
+        self.x, self.y = Width - (bg_Width // 2) - 128 + 41, Height - bg_Height + 48
         self.frame = 0
         self.action = 2
         self.dir_face = 0
@@ -143,6 +155,5 @@ class Character:
 
     def THROW(self):
         print('THROW')
-        throw = Throw(self.x, self.y, self.action)
+        throw = Throw(self.x, self.y, self.dir_face)
         game_world.add_object(throw, 1)
-
