@@ -6,6 +6,18 @@ from throw import Throw
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
+# Charater Run Speed
+PIXEL_PER_METER = (10.0 / 0.1)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0   # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# Character Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 5
+
 RD, LD, RU, LU, SPACE, JU, JD = range(7)
 
 key_event_table = {
@@ -34,7 +46,7 @@ class IDLE:
 
     def do(self):
         self.frame = 0
-        self.y += self.dir_Idle_y * 5
+        self.y += self.dir_Idle_y * RUN_SPEED_PPS * game_framework.frame_time
         if self.y > Height - bg_Height + 50 + 100:
             self.dir_Idle_y = -1
         if self.y < Height - bg_Height + 49:
@@ -43,14 +55,14 @@ class IDLE:
     def draw(self):
         if self.dir_Idle_y == 0:
             if self.dir_face == 1:
-                Character.char_image.clip_draw(self.frame * 82, 3 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 5 * 100, 82, 96, self.x, self.y)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(self.frame * 82, 2 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 4 * 100, 82, 96, self.x, self.y)
         elif self.dir_Idle_y != 0:
             if self.dir_face == 1:
-                Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 3 * 100, 82, 96, self.x, self.y)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 2 * 100, 82, 96, self.x, self.y)
 
 class RUN:
     def enter(self, event):
@@ -75,12 +87,15 @@ class RUN:
             self.THROW()
 
     def do(self):
-        if self.dir_Run_y == 0:
-            self.frame = (self.frame + 1) % 5
-        elif self.dir_Run_y != 0:
-            self.frame = 0
-        self.x += self.dir_x * 5
-        self.y += self.dir_Run_y * 5
+        # if self.dir_Run_y == 0:
+        # int(self.frame) = (int(self.frame) + 1) % 5
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        # elif self.dir_Run_y != 0:
+        #     int(self.frame) = 0
+        # self.x += self.dir_x * 5
+        self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
+        self.y += self.dir_Run_y * RUN_SPEED_PPS * game_framework.frame_time
+        # self.y += self.dir_Run_y * 5
         self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
         if self.y > Height - bg_Height + 50 + 100:
             self.dir_Run_y = -1
@@ -91,14 +106,14 @@ class RUN:
     def draw(self):
         if self.dir_Run_y == 0:
             if self.dir_x == -1:
-                Character.char_image.clip_draw(self.frame * 82, 5 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 0 * 100, 82, 96, self.x, self.y)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(self.frame * 82, 4 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 1 * 100, 82, 96, self.x, self.y)
         elif self.dir_Run_y != 0:
             if self.dir_x == -1:
-                Character.char_image.clip_draw(self.frame * 82, 0 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 2 * 100, 82, 96, self.x, self.y)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(self.frame * 82, 1 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 82, 3 * 100, 82, 96, self.x, self.y)
 
 next_state = {
     IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: IDLE, JU: IDLE},
@@ -119,7 +134,7 @@ class Character:
         self.dir_Idle_y = 0
         self.dir_Run_y = 0
         if Character.char_image == None:
-            Character.char_image = load_image("character_anime.png")
+            Character.char_image = load_image("character_anime_full.png")
 
         if Character.object_image == None:
             Character.object_image = load_image('target_1_32x32.png')
