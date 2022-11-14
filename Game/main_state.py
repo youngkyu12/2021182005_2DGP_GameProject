@@ -27,24 +27,24 @@ def handle_events():
 
 character = None
 back = None
-enemies1 = None
-enemies2 = None
-task1 = None
-task2 = None
+enemies1 = []
+enemies2 = []
+task1 = []
+task2 = []
 
 def enter():
     global character, back, enemies1, enemies2, task1, task2
     character = Character()
-    enemies1 = [Enemy1() for i in range(1)]
-    enemies2 = [Enemy2() for i in range(1)]
-    task1 = [Task1() for i in range(1)]
-    task2 = [Task2() for i in range(1)]
+    enemies1.append(Enemy1())
+    enemies2.append(Enemy2())
+    task1.append(Task1())
+    task2.append(Task2())
 
     back = Background()
     game_world.add_object(character, 1)
     game_world.add_object(back, 0)
-    game_world.add_objects(enemies1, 1)
-    game_world.add_objects(enemies2, 1)
+    game_world.add_object(enemies1[0], 1)
+    game_world.add_object(enemies2[0], 1)
     game_world.add_objects(task1, 1)
     game_world.add_objects(task2, 1)
 
@@ -52,9 +52,18 @@ def exit():
     game_world.clear()
 
 
+
 def update():
+    # global enemies1, one
     for game_object in game_world.all_objects():
         game_object.update()
+
+    # for game_object in game_world.all_add_object():
+    #     if time:
+    #
+    # if enemies1[0].y == 600:
+    #     enemies1.append(Enemy1())
+    #     game_world.add_object(enemies1[1], 1)
 
 def draw():
     clear_canvas()
@@ -67,6 +76,12 @@ def pasue():
 
 def resume():
     pass
+
+# def add():
+#     game_world.add_objects(enemies1, 1)
+#     game_world.add_objects(enemies2, 1)
+#     game_world.add_objects(task1, 1)
+#     game_world.add_objects(task2, 1)
 
 # test
 def test_self():
