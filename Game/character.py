@@ -128,7 +128,6 @@ class Character:
     def __init__(self):
         self.x, self.y = Width - (bg_Width // 2) - 128 + 41, Height - bg_Height + 48
         self.frame = 0
-        self.action = 2
         self.dir_face = 0
         self.dir_x = 0
         self.dir_Idle_y = 0
@@ -172,3 +171,9 @@ class Character:
         print('THROW')
         throw = Throw(self.x, self.y, self.dir_face)
         game_world.add_object(throw, 1)
+
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass

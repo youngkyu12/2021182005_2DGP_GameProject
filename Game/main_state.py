@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import game_world
+import esc_state
 
 from character import Character
 from background import Background
@@ -18,7 +19,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.quit()
+            game_framework.push_state(esc_state)
         else:
             character.handle_events(event)
 
@@ -48,10 +49,10 @@ def enter():
     game_world.add_objects(task1, 1)
     game_world.add_objects(task2, 1)
 
+
 def exit():
+    print('main_state exit')
     game_world.clear()
-
-
 
 def update():
     # global enemies1, one
@@ -67,14 +68,21 @@ def update():
 
 def draw():
     clear_canvas()
-    for game_object in game_world.all_objects():
-        game_object.draw()
+    draw_world()
     update_canvas()
 
-def pasue():
+def draw_world():
+    for game_object in game_world.all_objects():
+        game_object.draw()
+
+def pause():
+    for game_object in game_world.all_objects():
+        game_object.pause()
     pass
 
 def resume():
+    for game_object in game_world.all_objects():
+        game_object.resume()
     pass
 
 # def add():

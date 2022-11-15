@@ -21,6 +21,12 @@ class Enemy1:
     def draw(self):
         self.Bug.draw(self.x, self.y)
 
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass
+
 class Enemy2:
     def __init__(self):
         self.x, self.y = randint(Width - 128 - bg_Width + 16, Width - 128 - 16), Height - 16
@@ -33,3 +39,9 @@ class Enemy2:
 
     def draw(self):
         self.Soju.draw(self.x, self.y)
+
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass

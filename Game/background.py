@@ -36,3 +36,8 @@ class Background:
         self.font_item.draw(Width - bg_Width - 130, Height - bg_Height - 10 - 16, "Item", (0, 0, 0))
         self.ItemBox.draw(Width - bg_Width - 130 + 90, Height - bg_Height - 32)
 
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass

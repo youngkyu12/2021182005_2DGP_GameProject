@@ -36,3 +36,9 @@ class Throw:
 
     def draw(self):
         self.image.draw(self.x, self. y)
+
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass

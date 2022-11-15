@@ -18,6 +18,12 @@ class Task1:
     def draw(self):
         self.task1.draw(self.x, self.y)
 
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass
+
 class Task2:
     def __init__(self):
         self.x, self.y = randint(Width - 128 - bg_Width + 16, Width - 128 - 16), Height - 16
@@ -30,3 +36,9 @@ class Task2:
 
     def draw(self):
         self.task2.draw(self.x, self.y)
+
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass
