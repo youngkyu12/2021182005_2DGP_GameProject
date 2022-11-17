@@ -70,7 +70,7 @@ def handle_events():
             num += 1
             if num > 2:
                 num -= 1
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
             if num == 0:
                 game_framework.pop_state()
                 pass

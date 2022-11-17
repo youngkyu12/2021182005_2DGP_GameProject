@@ -1,3 +1,6 @@
+import main_state
+
+
 class GameState:
     def __init__(self, state):
         self.enter = state.enter
@@ -96,7 +99,7 @@ def fill_states(*states):
 
 import time
 frame_time = 0.0
-
+World_time = 60.0
 def run(start_state):
     global running, stack
     running = True
@@ -108,14 +111,15 @@ def run(start_state):
 
     stack.append(start_state)
     stack[-1].enter()
-
     current_time = time.time()
     while running:
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
-        global frame_time
+        global frame_time, World_time
         frame_time = time.time() - current_time
+        if main_state.character:
+            World_time = float(World_time) - frame_time
         frame_rate = 1 / frame_time
         current_time += frame_time
         # print(f"Frame Time: {frame_time}, Frame Rate: {frame_rate}")

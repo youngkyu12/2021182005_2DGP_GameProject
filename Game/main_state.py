@@ -33,6 +33,7 @@ enemies2 = []
 task1 = []
 task2 = []
 
+
 def enter():
     global character, back, enemies1, enemies2, task1, task2
     character = Character()
@@ -44,8 +45,12 @@ def enter():
     back = Background()
     game_world.add_object(character, 1)
     game_world.add_object(back, 0)
-    game_world.add_object(enemies1[0], 1)
-    game_world.add_object(enemies2[0], 1)
+    obj()
+
+
+def obj():
+    game_world.add_objects(enemies1, 1)
+    game_world.add_objects(enemies2, 1)
     game_world.add_objects(task1, 1)
     game_world.add_objects(task2, 1)
 
@@ -58,7 +63,6 @@ def update():
     # global enemies1, one
     for game_object in game_world.all_objects():
         game_object.update()
-
     # for game_object in game_world.all_add_object():
     #     if time:
     #
@@ -98,7 +102,7 @@ def test_self():
 
     path = os.getcwd() + "\Resource"
     os.chdir(path)
-
+    hide_cursor()
 
     open_canvas(Width, Height)
     game_framework.run(main_state)

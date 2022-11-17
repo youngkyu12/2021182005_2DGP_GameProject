@@ -8,7 +8,7 @@ bg_Width, bg_Height = 1024, 600
 
 class Enemy1:
     def __init__(self):
-        self.x, self.y = randint(Width - 128 - bg_Width + 16, Width - 128 - 16), Height - 16
+        self.x, self.y = randint(16, Width - 16), Height - 16
         self.Bug = load_image("Bug_Enemy32x32.png")
         self.t = 0
 
@@ -29,12 +29,12 @@ class Enemy1:
 
 class Enemy2:
     def __init__(self):
-        self.x, self.y = randint(Width - 128 - bg_Width + 16, Width - 128 - 16), Height - 16
+        self.x, self.y = randint(16, Width - 16), Height - 16
         self.Soju = load_image("Soju_Enemy32x32.png")
 
     def update(self):
         self.y -= 1
-        if self.y < Height - bg_Height + 16:
+        if self.y < Height - bg_Height + 16 - 20:
             game_world.remove_object(self)
 
     def draw(self):

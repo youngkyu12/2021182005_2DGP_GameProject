@@ -7,12 +7,12 @@ bg_Width, bg_Height = 1024, 600
 
 class Task1:
     def __init__(self):
-        self.x, self.y = randint(Width - 128 - bg_Width + 16, Width - 128 - 16), Height - 16
+        self.x, self.y = randint(16, Width - 16), Height - 16
         self.task1 = load_image("target_1_32x32.png")
 
     def update(self):
         self.y -= 1
-        if self.y < Height - bg_Height + 16:
+        if self.y < Height - bg_Height + 16 - 20:
             game_world.remove_object(self)
 
     def draw(self):
@@ -26,12 +26,12 @@ class Task1:
 
 class Task2:
     def __init__(self):
-        self.x, self.y = randint(Width - 128 - bg_Width + 16, Width - 128 - 16), Height - 16
+        self.x, self.y = randint(16, Width - 16), Height - 16
         self.task2 = load_image("target_2_32x32.png")
 
     def update(self):
         self.y -= 1
-        if self.y < Height - bg_Height + 16:
+        if self.y < Height - bg_Height + 16 - 20:
             game_world.remove_object(self)
 
     def draw(self):

@@ -47,9 +47,9 @@ class IDLE:
     def do(self):
         self.frame = 0
         self.y += self.dir_Idle_y * RUN_SPEED_PPS * game_framework.frame_time
-        if self.y > Height - bg_Height + 50 + 100:
+        if self.y > Height - bg_Height + 50 + 100 - 20:
             self.dir_Idle_y = -1
-        if self.y < Height - bg_Height + 49:
+        if self.y < Height - bg_Height + 49 - 20:
             self.dir_Idle_y = 0
 
     def draw(self):
@@ -96,10 +96,10 @@ class RUN:
         self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
         self.y += self.dir_Run_y * RUN_SPEED_PPS * game_framework.frame_time
         # self.y += self.dir_Run_y * 5
-        self.x = clamp(Width - 128 - bg_Width, self.x, Width - 128)
-        if self.y > Height - bg_Height + 50 + 100:
+        self.x = clamp(15, self.x, Width - 15)
+        if self.y > Height - bg_Height + 50 + 100 - 20:
             self.dir_Run_y = -1
-        if self.y < Height - bg_Height + 50:
+        if self.y < Height - bg_Height + 49 - 20:
             self.dir_Run_y = 0
 
 
@@ -126,7 +126,7 @@ class Character:
     object_image = None
 
     def __init__(self):
-        self.x, self.y = Width - (bg_Width // 2) - 128 + 41, Height - bg_Height + 48
+        self.x, self.y = Width - (bg_Width // 2) - 128 + 41, Height - bg_Height - 20 + 48
         self.frame = 0
         self.dir_face = 0
         self.dir_x = 0
