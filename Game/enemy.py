@@ -1,5 +1,6 @@
 from pico2d import *
 import game_world
+import main_state
 from random import randint
 
 
@@ -14,7 +15,7 @@ class Enemy1:
 
     def update(self):
         self.y -= 1
-        if self.y < Height - bg_Height + 16:
+        if self.y < Height - bg_Height + 16 - 20:
             game_world.remove_object(self)
 
 

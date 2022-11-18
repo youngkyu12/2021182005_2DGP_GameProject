@@ -118,7 +118,7 @@ def run(start_state):
         stack[-1].draw()
         global frame_time, World_time
         frame_time = time.time() - current_time
-        if main_state.character:
+        if stack[-1] == main_state:
             World_time = float(World_time) - frame_time
         frame_rate = 1 / frame_time
         current_time += frame_time

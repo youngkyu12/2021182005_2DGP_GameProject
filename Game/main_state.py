@@ -2,6 +2,7 @@ from pico2d import *
 import game_framework
 import game_world
 import esc_state
+import shop_state
 
 from character import Character
 from background import Background
@@ -24,14 +25,20 @@ def handle_events():
             character.handle_events(event)
 
 
-
-
 character = None
 back = None
 enemies1 = []
 enemies2 = []
 task1 = []
 task2 = []
+def init():
+    global character, back, enemies1, enemies2, task1, task2
+    character = None
+    back = None
+    enemies1 = []
+    enemies2 = []
+    task1 = []
+    task2 = []
 
 
 def enter():
@@ -41,7 +48,8 @@ def enter():
     enemies2.append(Enemy2())
     task1.append(Task1())
     task2.append(Task2())
-
+    game_framework.World_time = 60.0
+    # game_framework.World_time = 1.0   # test
     back = Background()
     game_world.add_object(character, 1)
     game_world.add_object(back, 0)
@@ -63,6 +71,8 @@ def update():
     # global enemies1, one
     for game_object in game_world.all_objects():
         game_object.update()
+    if game_framework.World_time < 0.0:
+        game_framework.change_state(shop_state)
     # for game_object in game_world.all_add_object():
     #     if time:
     #
@@ -74,6 +84,7 @@ def draw():
     clear_canvas()
     draw_world()
     update_canvas()
+
 
 def draw_world():
     for game_object in game_world.all_objects():
@@ -89,11 +100,6 @@ def resume():
         game_object.resume()
     pass
 
-# def add():
-#     game_world.add_objects(enemies1, 1)
-#     game_world.add_objects(enemies2, 1)
-#     game_world.add_objects(task1, 1)
-#     game_world.add_objects(task2, 1)
 
 # test
 def test_self():

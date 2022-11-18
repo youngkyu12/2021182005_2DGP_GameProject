@@ -42,7 +42,8 @@ class IDLE:
         print('EXIT IDLE')
         self.dir_Run_y = self.dir_Idle_y
         if event == SPACE:
-            self.THROW()
+            pass
+            # self.THROW()
 
     def do(self):
         self.frame = 0
@@ -84,7 +85,8 @@ class RUN:
         self.dir_face = self.dir_x
         self.dir_Idle_y = self.dir_Run_y
         if event == SPACE:
-            self.THROW()
+            pass
+            # self.THROW()
 
     def do(self):
         # if self.dir_Run_y == 0:

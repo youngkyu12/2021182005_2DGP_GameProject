@@ -1,7 +1,10 @@
 import main_state
 import game_framework
+import shop_state
 from pico2d import *
 from character import *
+from background import *
+
 
 esc_image = None
 pause_font = None
@@ -16,19 +19,18 @@ Box = [(Width // 2 - 50, Height // 2 + 30, Width // 2 + 60, Height // 2 + 10),
        (Width // 2 - 50, Height // 2 - 70, Width // 2, Height // 2 - 90)]
 num = 0
 
+esc_bg = None
+
 def enter():
     print('esc_state enter')
-    global esc_image, pause_font, continue_font, exit_font, retry_font
-    esc_image = load_image('esc_image.png')
-    pause_font = load_font('ENCR10B.TTF', 30)
-    continue_font = load_font('ENCR10B.TTF', 21)
-    exit_font = load_font('ENCR10B.TTF', 21)
-    retry_font = load_font('ENCR10B.TTF', 21)
+    global esc_bg
+    esc_bg = Esc_Background()
+
 
 def exit():
     print('esc_state exit')
-    global esc_image
-    del esc_image
+    global esc_bg
+    del esc_bg
 
 
 def update():
@@ -37,12 +39,11 @@ def update():
 def draw():
     global num
     clear_canvas()
-    main_state.draw_world()
-    esc_image.draw(Width // 2, Height // 2)
-    pause_font.draw(Width // 2 - 50, Height // 2 + 70, "Pause", (255, 0, 0))
-    continue_font.draw(Width // 2 - 50, Height // 2 + 20, "Continue", (0, 0, 0))
-    retry_font.draw(Width // 2 - 50, Height // 2 - 30, "Retry", (0, 0, 0))
-    exit_font.draw(Width // 2 - 50, Height // 2 - 80, "Exit", (0, 0, 0))
+    if main_state.back:
+        main_state.draw_world()
+    if shop_state.image:
+        shop_state.draw_world()
+    esc_bg.draw()
     draw_rectangle(*Box[num])
     update_canvas()
 
@@ -76,15 +77,8 @@ def handle_events():
                 pass
             elif num == 1:
                 game_world.clear()
-                main_state.character = None
-                main_state.back = None
-                main_state.enemies1 = []
-                main_state.enemies2 = []
-                main_state.task1 = []
-                main_state.task2 = []
-                game_world.clear()
-                main_state.enter()
-                game_framework.pop_state()
+                main_state.init()
+                game_framework.change_state(main_state)
                 pass
             elif num == 2:
                 game_framework.quit()
