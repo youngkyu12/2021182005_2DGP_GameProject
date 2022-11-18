@@ -52,6 +52,9 @@ class Background:
     def get_bb(self):
         return 0, 0, 1600 - 1, 100
 
+    def handle_collision(self, other, group):
+        pass
+
     def pause(self):
         pass
 
@@ -71,9 +74,6 @@ class Shop_Background:
     def draw(self):
         self.shop_image.draw(Width // 2, Height // 2)
         draw_rectangle(*self.get_bb())
-
-    def get_bb(self):
-        return 0, 0, 1600 - 1, 100
 
     def pause(self):
         pass

@@ -176,7 +176,7 @@ class Character:
         game_world.add_object(throw, 1)
 
     def get_bb(self):
-        return self.x - 15, self.y - 50, self.x + 15, self.y + 50
+        return self.x - 16, self.y - 50, self.x + 16, self.y + 50
 
     def handle_collision(self, other, group):
         pass

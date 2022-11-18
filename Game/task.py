@@ -26,11 +26,11 @@ class Task1:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'character:task1':
+        if group == 'character:task1' or group == 'floor:task1':
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
 
 
 class Task2:
@@ -54,8 +54,8 @@ class Task2:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'character:task2':
+        if group == 'character:task2' or group == 'floor:task2':
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 16, self.y - 16, self.x + 16, self.y + 16

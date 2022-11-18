@@ -30,11 +30,11 @@ class Enemy1:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'character:enemy1':
+        if group == 'character:enemy1' or group == 'floor:enemy1':
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
 
 
 class Enemy2:
@@ -58,8 +58,8 @@ class Enemy2:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'character:enemy2':
+        if group == 'character:enemy2' or group == 'floor:enemy2':
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
