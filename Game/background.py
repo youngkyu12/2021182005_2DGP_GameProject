@@ -42,7 +42,7 @@ class Background:
         self.hart.draw(21, Height - 21)
         self.hart.draw(21 + 42 + 1, Height - 21)
         self.hart.draw(64 + 42 + 1, Height - 21)
-        self.coin.draw(21, Height - 21 - 32)
+        self.coin.draw(16, Height - 21 - 64)
         self.font_time.draw(Width // 2 - 30, Height - 10, "Timer", (0, 255, 0))
         self.font_time.draw(Width // 2 + 50, Height - 10, f"{game_framework.World_time:.0f}", (0, 255, 0))
         self.font_item.draw(15, Height - bg_Height - 70, "Item", (0, 0, 0))
@@ -73,7 +73,6 @@ class Shop_Background:
 
     def draw(self):
         self.shop_image.draw(Width // 2, Height // 2)
-        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
