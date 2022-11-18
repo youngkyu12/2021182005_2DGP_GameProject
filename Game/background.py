@@ -47,6 +47,10 @@ class Background:
         self.font_time.draw(Width // 2 + 50, Height - 10, f"{game_framework.World_time:.0f}", (0, 255, 0))
         self.font_item.draw(15, Height - bg_Height - 70, "Item", (0, 0, 0))
         self.ItemBox.draw(115, Height - bg_Height - 70)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return 0, 0, 1600 - 1, 100
 
     def pause(self):
         pass
@@ -56,14 +60,21 @@ class Background:
 
 class Shop_Background:
     shop_image = None
+
     def __init__(self):     # 호출할 때마다 생성하게됨 조건문을 통해 단 한번의 이미지 로딩만 수행
         if Shop_Background.shop_image == None:
             Shop_Background.shop_image = load_image("shop_image.png")
 
     def update(self):
         pass
+
     def draw(self):
         self.shop_image.draw(Width // 2, Height // 2)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return 0, 0, 1600 - 1, 100
+
     def pause(self):
         pass
 
@@ -98,6 +109,7 @@ class Esc_Background:
         self.continue_font.draw(Width // 2 - 50, Height // 2 + 20, "Continue", (0, 0, 0))
         self.retry_font.draw(Width // 2 - 50, Height // 2 - 30, "Retry", (0, 0, 0))
         self.exit_font.draw(Width // 2 - 50, Height // 2 - 80, "Exit", (0, 0, 0))
+
 
     def pause(self):
         pass

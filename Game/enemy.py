@@ -21,12 +21,21 @@ class Enemy1:
 
     def draw(self):
         self.Bug.draw(self.x, self.y)
+        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
 
     def resume(self):
         pass
+
+    def handle_collision(self, other, group):
+        if group == 'character:enemy1':
+            game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+
 
 class Enemy2:
     def __init__(self):
@@ -40,9 +49,17 @@ class Enemy2:
 
     def draw(self):
         self.Soju.draw(self.x, self.y)
+        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
 
     def resume(self):
         pass
+
+    def handle_collision(self, other, group):
+        if group == 'character:enemy2':
+            game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10

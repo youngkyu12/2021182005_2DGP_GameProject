@@ -54,6 +54,17 @@ def enter():
     game_world.add_object(character, 1)
     game_world.add_object(back, 0)
     obj()
+    collide_data()
+
+def collide_data():
+    game_world.add_collision_pairs(character, enemies1, 'character:enemy1')
+    game_world.add_collision_pairs(character, enemies2, 'character:enemy2')
+    game_world.add_collision_pairs(character, task1, 'character:task1')
+    game_world.add_collision_pairs(character, task2, 'character:task2')
+    game_world.add_collision_pairs(back, enemies1, 'floor:enemy1')
+    game_world.add_collision_pairs(back, enemies2, 'floor:enemy2')
+    game_world.add_collision_pairs(back, task1, 'floor:task1')
+    game_world.add_collision_pairs(back, task2, 'floor:task2')
 
 
 def obj():
@@ -73,6 +84,11 @@ def update():
         game_object.update()
     if game_framework.World_time < 0.0:
         game_framework.change_state(shop_state)
+    for a, b, group in game_world.all_collision_pairs():
+        if collide(a, b):
+            print('COLLISION')
+            a.handle_collision(b, group)
+            b.handle_collision(a, group)
     # for game_object in game_world.all_add_object():
     #     if time:
     #
@@ -99,6 +115,18 @@ def resume():
     for game_object in game_world.all_objects():
         game_object.resume()
     pass
+
+def collide(a, b):
+    la, ba, ra, ta = a.get_bb()
+    lb, bb, rb, tb = b.get_bb()
+
+    if la > rb: return False
+    if ra < lb: return False
+    if ta < bb: return False
+    if ba > tb: return False
+
+    return True
+
 
 
 # test

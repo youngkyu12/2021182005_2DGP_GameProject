@@ -158,6 +158,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
+        draw_rectangle(*self.get_bb())
         debug_print('PPPP')
         debug_print(f' Dir_x: {self.dir_x}, Dir_Idle_y: {self.dir_Idle_y}, Dir_Run_y: {self.dir_Run_y}')
 
@@ -173,6 +174,12 @@ class Character:
         print('THROW')
         throw = Throw(self.x, self.y, self.dir_face)
         game_world.add_object(throw, 1)
+
+    def get_bb(self):
+        return self.x - 15, self.y - 50, self.x + 15, self.y + 50
+
+    def handle_collision(self, other, group):
+        pass
 
     def pause(self):
         pass

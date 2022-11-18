@@ -17,12 +17,21 @@ class Task1:
 
     def draw(self):
         self.task1.draw(self.x, self.y)
+        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
 
     def resume(self):
         pass
+
+    def handle_collision(self, other, group):
+        if group == 'character:task1':
+            game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+
 
 class Task2:
     def __init__(self):
@@ -36,9 +45,17 @@ class Task2:
 
     def draw(self):
         self.task2.draw(self.x, self.y)
+        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
 
     def resume(self):
         pass
+
+    def handle_collision(self, other, group):
+        if group == 'character:task2':
+            game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
