@@ -18,29 +18,37 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 5
 
-RD, LD, RU, LU, SPACE, JU, JD = range(7)
+RD, LD, RU, LU, SPACE, JU, JD, DU, DD = range(9)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_SPACE): SPACE,
     (SDL_KEYDOWN, SDLK_RIGHT): RD,
     (SDL_KEYDOWN, SDLK_LEFT): LD,
     (SDL_KEYDOWN, SDLK_UP): JD,
+    (SDL_KEYDOWN, SDLK_DOWN): DD,
     (SDL_KEYUP, SDLK_RIGHT): RU,
     (SDL_KEYUP, SDLK_LEFT): LU,
-    (SDL_KEYUP, SDLK_UP): JU
+    (SDL_KEYUP, SDLK_UP): JU,
+    (SDL_KEYUP, SDLK_DOWN): DU
 }
 
 class IDLE:
     def enter(self, event):
         print('ENTER IDLE')
         self.dir_x = 0
-        if event == JD:
+        self.dir_Idle_down = 0
+        if event == JD and self.dir_Idle_down == 0:
             if self.dir_Idle_y == 0:
                 self.dir_Idle_y = 1
+        elif event == DD and self.dir_Idle_y == 0:
+            self.dir_Idle_down += 1
+        elif event == DU and self.dir_Idle_y == 0:
+            self.dir_Idle_down -= 1
 
     def exit(self, event):
         print('EXIT IDLE')
         self.dir_Run_y = self.dir_Idle_y
+        self.dir_Run_down = self.dir_Idle_down
         if event == SPACE:
             pass
             # self.THROW()
@@ -54,20 +62,27 @@ class IDLE:
             self.dir_Idle_y = 0
 
     def draw(self):
-        if self.dir_Idle_y == 0:
+        if self.dir_Idle_y == 0 and self.dir_Idle_down != 1:
             if self.dir_face == 1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 5 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 3 * 100, 100, 99, self.x, self.y)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 4 * 100, 82, 96, self.x, self.y)
-        elif self.dir_Idle_y != 0:
+                Character.char_image.clip_draw(int(self.frame) * 100, 2 * 100, 100, 99, self.x, self.y)
+        elif self.dir_Idle_y != 0 and self.dir_Idle_down != 1:
             if self.dir_face == 1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 3 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 2 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, self.x, self.y)
+        elif self.dir_Run_y == 0 and self.dir_Idle_down == 1:
+            # 테스트 이미지
+            if self.dir_face == 1:
+                Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, self.x, self.y)
+            elif self.dir_face != 1:
+                Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, self.x, self.y)
 
 class RUN:
     def enter(self, event):
         print('ENTER RUN')
+        self.dir_Run_down = 0
         if event == RD:
             self.dir_x += 1
         elif event == LD:
@@ -76,14 +91,19 @@ class RUN:
             self.dir_x -= 1
         elif event == LU:
             self.dir_x += 1
-        elif event == JD:
+        elif event == JD and self.dir_Run_down == 0:
             if self.dir_Run_y == 0:
                 self.dir_Run_y = 1
+        elif event == DD and self.dir_Run_y == 0:
+            self.dir_Run_down += 1
+        elif event == DU and self.dir_Run_y == 0:
+            self.dir_Run_down -= 1
 
     def exit(self, event):
         print('EXIT RUN')
         self.dir_face = self.dir_x
         self.dir_Idle_y = self.dir_Run_y
+        self.dir_Idle_down = self.dir_Run_down
         if event == SPACE:
             pass
             # self.THROW()
@@ -106,20 +126,27 @@ class RUN:
 
 
     def draw(self):
-        if self.dir_Run_y == 0:
+        if self.dir_Run_y == 0 and self.dir_Run_down != 1:
             if self.dir_x == -1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 0 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 6 * 100, 100, 99, self.x, self.y)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 1 * 100, 82, 96, self.x, self.y)
-        elif self.dir_Run_y != 0:
+                Character.char_image.clip_draw(int(self.frame) * 100, 7 * 100, 100, 99, self.x, self.y)
+        elif self.dir_Run_y != 0 and self.dir_Run_down != 1:
             if self.dir_x == -1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 2 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, self.x, self.y)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(int(self.frame) * 82, 3 * 100, 82, 96, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
+        elif self.dir_Run_y == 0 and self.dir_Run_down == 1:
+            # 테스트 이미지
+            if self.dir_x == -1:
+                Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, self.x, self.y)
+            elif self.dir_x == 1:
+                Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, self.x, self.y)
+
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: IDLE, JU: IDLE},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, JD: RUN, JU: RUN}
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE, JD: IDLE, JU: IDLE, DD: IDLE, DU: IDLE},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, JD: RUN, JU: RUN, DD: RUN, DU: RUN}
 }
 
 
@@ -134,6 +161,9 @@ class Character:
         self.dir_x = 0
         self.dir_Idle_y = 0
         self.dir_Run_y = 0
+        self.dir_Idle_down = 0
+        self.dir_Run_down = 0
+
         if Character.char_image == None:
             Character.char_image = load_image("character_anime_full.png")
 

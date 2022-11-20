@@ -48,7 +48,7 @@ def enter():
     enemies2.append(Enemy2())
     task1.append(Task1())
     task2.append(Task2())
-    game_framework.World_time = 5.0
+    game_framework.World_time = 60.0
     # game_framework.World_time = 1.0   # test
     back = Background()
     game_world.add_object(character, 1)
