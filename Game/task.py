@@ -5,10 +5,11 @@ from random import randint
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
-class Task1:
+# 상속 관계를 만들자
+class Task_ppt:
     def __init__(self):
         self.x, self.y = randint(16, Width - 16), Height - 16
-        self.task1 = load_image("target_1_32x32.png")
+        self.task_ppt = load_image("target_1_32x32.png")
 
     def update(self):
         self.y -= 1
@@ -16,7 +17,7 @@ class Task1:
             game_world.remove_object(self)
 
     def draw(self):
-        self.task1.draw(self.x, self.y)
+        self.task_ppt.draw(self.x, self.y)
         draw_rectangle(*self.get_bb())
 
     def pause(self):
@@ -26,17 +27,17 @@ class Task1:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'character:task1' or group == 'floor:task1':
+        if group == 'character:task_ppt' or group == 'floor:task_ppt':
             game_world.remove_object(self)
 
     def get_bb(self):
         return self.x - 16, self.y - 16, self.x + 16, self.y + 16
 
 
-class Task2:
+class Task_report:
     def __init__(self):
         self.x, self.y = randint(16, Width - 16), Height - 16
-        self.task2 = load_image("target_2_32x32.png")
+        self.task_report = load_image("target_2_32x32.png")
 
     def update(self):
         self.y -= 1
@@ -44,7 +45,7 @@ class Task2:
             game_world.remove_object(self)
 
     def draw(self):
-        self.task2.draw(self.x, self.y)
+        self.task_report.draw(self.x, self.y)
         draw_rectangle(*self.get_bb())
 
     def pause(self):
@@ -54,7 +55,7 @@ class Task2:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'character:task2' or group == 'floor:task2':
+        if group == 'character:task_report' or group == 'floor:task_report':
             game_world.remove_object(self)
 
     def get_bb(self):

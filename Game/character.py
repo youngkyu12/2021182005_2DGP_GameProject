@@ -6,6 +6,8 @@ from throw import Throw
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
+# 60프레임 고정시켜보기
+
 # Charater Run Speed
 PIXEL_PER_METER = (10.0 / 0.1)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 20.0   # Km / Hour

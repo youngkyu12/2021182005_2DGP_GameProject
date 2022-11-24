@@ -1,3 +1,4 @@
+import pico2d.pico2d
 from pico2d import *
 import game_framework
 import game_world
@@ -9,10 +10,11 @@ from background import Background
 from enemy import *
 from task import *
 
+# 변수에 의미 없는 숫자 넣지 말고 의미를 담는 단어를 사용
+# 함수는 소문자, 클래스는 첫글자 대문자
 
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
-
 
 def handle_events():
     events = get_events()
@@ -27,28 +29,28 @@ def handle_events():
 
 character = None
 back = None
-enemies1 = []
-enemies2 = []
-task1 = []
-task2 = []
+enemy_bug = []
+enemy_soju = []
+task_ppt = []
+task_report = []
 def init():
-    global character, back, enemies1, enemies2, task1, task2
+    global character, back, enemy_bug, enemy_soju, task_ppt, task_report
     character = None
     back = None
-    enemies1 = []
-    enemies2 = []
-    task1 = []
-    task2 = []
+    enemy_bug = []
+    enemy_soju = []
+    task_ppt = []
+    task_report = []
 
 
 def enter():
-    global character, back, enemies1, enemies2, task1, task2
+    global character, back, enemy_bug, enemy_soju, task_ppt, task_report
     character = Character()
-    enemies1.append(Enemy1())
-    enemies2.append(Enemy2())
-    task1.append(Task1())
-    task2.append(Task2())
-    game_framework.World_time = 60.0
+    enemy_bug.append(Enemy_bug())
+    enemy_soju.append(Enemy_soju())
+    task_ppt.append(Task_ppt())
+    task_report.append(Task_report())
+    game_framework.World_time = 2.0
     # game_framework.World_time = 1.0   # test
     back = Background()
     game_world.add_object(character, 1)
@@ -57,21 +59,21 @@ def enter():
     collide_data()
 
 def collide_data():
-    game_world.add_collision_pairs(character, enemies1, 'character:enemy1')
-    game_world.add_collision_pairs(character, enemies2, 'character:enemy2')
-    game_world.add_collision_pairs(character, task1, 'character:task1')
-    game_world.add_collision_pairs(character, task2, 'character:task2')
-    game_world.add_collision_pairs(back, enemies1, 'floor:enemy1')
-    game_world.add_collision_pairs(back, enemies2, 'floor:enemy2')
-    game_world.add_collision_pairs(back, task1, 'floor:task1')
-    game_world.add_collision_pairs(back, task2, 'floor:task2')
+    game_world.add_collision_pairs(character, enemy_bug, 'character:enemy_bug')
+    game_world.add_collision_pairs(character, enemy_soju, 'character:enemy_soju')
+    game_world.add_collision_pairs(character, task_ppt, 'character:task_ppt')
+    game_world.add_collision_pairs(character, task_ppt, 'character:task_report')
+    game_world.add_collision_pairs(back, enemy_bug, 'floor:enemy_bug')
+    game_world.add_collision_pairs(back, enemy_soju, 'floor:enemy_soju')
+    game_world.add_collision_pairs(back, task_ppt, 'floor:task_ppt')
+    game_world.add_collision_pairs(back, task_report, 'floor:task_report')
 
 
 def obj():
-    game_world.add_objects(enemies1, 1)
-    game_world.add_objects(enemies2, 1)
-    game_world.add_objects(task1, 1)
-    game_world.add_objects(task2, 1)
+    game_world.add_objects(enemy_bug, 1)
+    game_world.add_objects(enemy_soju, 1)
+    game_world.add_objects(task_ppt, 1)
+    game_world.add_objects(task_report, 1)
 
 
 def exit():
@@ -89,6 +91,8 @@ def update():
             print('COLLISION')
             a.handle_collision(b, group)
             b.handle_collision(a, group)
+
+    # 연속적인 오브젝트 찍기 이때 시간을 기준으로 찍는 것이 좋을 것 같음 객체를 여기서 찍는게 아니라 Class안에서 찍게 해보자
     # for game_object in game_world.all_add_object():
     #     if time:
     #
