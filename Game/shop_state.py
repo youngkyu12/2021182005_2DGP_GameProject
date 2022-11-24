@@ -6,18 +6,28 @@ from pico2d import *
 
 from character import Character
 from background import Shop_Background
+from item import *
 
 Width, Height = 1280, 720
 
 character = None
 image = None
+item_task_clear = None
+item_hart_plus = None
+item_shield = None
 
 def enter():
-    global image, character
+    global image, character, item_task_clear, item_hart_plus, item_shield
     character = Character()
     image = Shop_Background()
+    item_task_clear = Item_task_clear()
+    item_hart_plus = Item_hart_plus()
+    item_shield = Item_shield()
     game_world.add_object(character, 1)
     game_world.add_object(image, 0)
+    game_world.add_object(item_task_clear, 0)
+    game_world.add_object(item_hart_plus, 0)
+    game_world.add_object(item_shield, 0)
 
 def exit():
     game_world.clear()
