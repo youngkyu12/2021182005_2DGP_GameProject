@@ -100,6 +100,10 @@ def fill_states(*states):
 import time
 frame_time = 0.0
 World_time = 60.0
+bug_time = 4.0
+soju_time = 4.0
+ppt_time = 4.0
+report_time = 4.0
 def run(start_state):
     global running, stack
     running = True
@@ -116,10 +120,14 @@ def run(start_state):
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
-        global frame_time, World_time
+        global frame_time, World_time, bug_time, soju_time, ppt_time, report_time
         frame_time = time.time() - current_time
         if stack[-1] == main_state:
             World_time = float(World_time) - frame_time
+        bug_time += frame_time
+        soju_time += frame_time
+        ppt_time += frame_time
+        report_time += frame_time
         frame_rate = 1 / frame_time
         current_time += frame_time
         # print(f"Frame Time: {frame_time}, Frame Rate: {frame_rate}")

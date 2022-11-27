@@ -33,6 +33,12 @@ enemy_bug = []
 enemy_soju = []
 task_ppt = []
 task_report = []
+num_bug = 0
+num_soju = 0
+num_ppt = 0
+num_report = 0
+
+
 def init():
     global character, back, enemy_bug, enemy_soju, task_ppt, task_report
     character = None
@@ -46,34 +52,62 @@ def init():
 def enter():
     global character, back, enemy_bug, enemy_soju, task_ppt, task_report
     character = Character()
-    enemy_bug.append(Enemy_bug())
-    enemy_soju.append(Enemy_soju())
-    task_ppt.append(Task_ppt())
-    task_report.append(Task_report())
-    game_framework.World_time = 2.0
+    # enemy_bug = [Enemy_bug() for i in range(7)]
+    # enemy_soju = [Enemy_bug() for i in range(7)]
+    # task_ppt = [Task_ppt() for i in range(7)]
+    # task_report = [Task_report() for i in range(7)]
+
+    game_framework.World_time = 60.0
     # game_framework.World_time = 1.0   # test
     back = Background()
     game_world.add_object(character, 1)
     game_world.add_object(back, 0)
-    obj()
-    collide_data()
+    # collide_data()
 
-def collide_data():
-    game_world.add_collision_pairs(character, enemy_bug, 'character:enemy_bug')
-    game_world.add_collision_pairs(character, enemy_soju, 'character:enemy_soju')
-    game_world.add_collision_pairs(character, task_ppt, 'character:task_ppt')
-    game_world.add_collision_pairs(character, task_ppt, 'character:task_report')
-    game_world.add_collision_pairs(back, enemy_bug, 'floor:enemy_bug')
-    game_world.add_collision_pairs(back, enemy_soju, 'floor:enemy_soju')
-    game_world.add_collision_pairs(back, task_ppt, 'floor:task_ppt')
-    game_world.add_collision_pairs(back, task_report, 'floor:task_report')
+# def collide_data():
+#     game_world.add_collision_pairs(character, enemy_bug, 'character:enemy_bug')
+#     game_world.add_collision_pairs(character, enemy_soju, 'character:enemy_soju')
+#     game_world.add_collision_pairs(character, task_ppt, 'character:task_ppt')
+#     game_world.add_collision_pairs(character, task_report, 'character:task_report')
+#     game_world.add_collision_pairs(back, enemy_bug, 'floor:enemy_bug')
+#     game_world.add_collision_pairs(back, enemy_soju, 'floor:enemy_soju')
+#     game_world.add_collision_pairs(back, task_ppt, 'floor:task_ppt')
+#     game_world.add_collision_pairs(back, task_report, 'floor:task_report')
 
 
 def obj():
-    game_world.add_objects(enemy_bug, 1)
-    game_world.add_objects(enemy_soju, 1)
-    game_world.add_objects(task_ppt, 1)
-    game_world.add_objects(task_report, 1)
+    global num_bug, num_soju, num_ppt, num_report
+    if game_framework.bug_time > 1.0:
+        enemy_bug.append(Enemy_bug())
+        game_world.add_object(enemy_bug[num_bug], 1)
+        game_world.add_collision_pairs(character, enemy_bug[num_bug], 'character:enemy_bug')
+        game_world.add_collision_pairs(back, enemy_bug[num_bug], 'floor:enemy_bug')
+        game_framework.bug_time = 0.0
+        num_bug += 1
+
+    if game_framework.soju_time > 2.0:
+        enemy_soju.append(Enemy_soju())
+        game_world.add_object(enemy_soju[num_soju], 1)
+        game_world.add_collision_pairs(character, enemy_soju[num_soju], 'character:enemy_soju')
+        game_world.add_collision_pairs(back, enemy_soju[num_soju], 'floor:enemy_soju')
+        game_framework.soju_time = 0.0
+        num_soju += 1
+
+    if game_framework.ppt_time > 2.0:
+        task_ppt.append(Task_ppt())
+        game_world.add_object(task_ppt[num_ppt], 1)
+        game_world.add_collision_pairs(character, task_ppt[num_ppt], 'character:task_ppt')
+        game_world.add_collision_pairs(back, task_ppt[num_ppt], 'floor:task_ppt')
+        game_framework.ppt_time = 0.0
+        num_ppt += 1
+
+    if game_framework.report_time > 1.0:
+        task_report.append(Task_report())
+        game_world.add_object(task_report[num_report], 1)
+        game_world.add_collision_pairs(character, task_report[num_report], 'character:task_report')
+        game_world.add_collision_pairs(back, task_report[num_report], 'floor:task_report')
+        game_framework.report_time = 0.0
+        num_report += 1
 
 
 def exit():
@@ -91,6 +125,8 @@ def update():
             print('COLLISION')
             a.handle_collision(b, group)
             b.handle_collision(a, group)
+    obj()
+
 
     # 연속적인 오브젝트 찍기 이때 시간을 기준으로 찍는 것이 좋을 것 같음 객체를 여기서 찍는게 아니라 Class안에서 찍게 해보자
     # for game_object in game_world.all_add_object():
