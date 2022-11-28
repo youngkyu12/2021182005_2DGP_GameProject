@@ -36,21 +36,21 @@ key_event_table = {
 
 class IDLE:
     def enter(self, event):
-        print('ENTER IDLE')
+        # print('ENTER IDLE')
         self.dir_x = 0
-        self.dir_Idle_down = 0
         if event == JD and self.dir_Idle_down == 0:
             if self.dir_Idle_y == 0:
                 self.dir_Idle_y = 1
         elif event == DD and self.dir_Idle_y == 0:
-            self.dir_Idle_down += 1
+            self.dir_Idle_down = 1
         elif event == DU and self.dir_Idle_y == 0:
-            self.dir_Idle_down -= 1
+            self.dir_Idle_down = 0
 
     def exit(self, event):
-        print('EXIT IDLE')
+        # print('EXIT IDLE')
         self.dir_Run_y = self.dir_Idle_y
         self.dir_Run_down = self.dir_Idle_down
+        # print(f'{self.dir_Idle_down}')
         if event == SPACE:
             pass
             # self.THROW()
@@ -64,12 +64,12 @@ class IDLE:
             self.dir_Idle_y = 0
 
     def draw(self):
-        if self.dir_Idle_y == 0 and self.dir_Idle_down != 1:
+        if self.dir_Idle_y == 0 and self.dir_Idle_down == 0:
             if self.dir_face == 1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 3 * 100, 100, 99, self.x, self.y)
             elif self.dir_face != 1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 2 * 100, 100, 99, self.x, self.y)
-        elif self.dir_Idle_y != 0 and self.dir_Idle_down != 1:
+        elif self.dir_Idle_y != 0 and self.dir_Idle_down == 0:
             if self.dir_face == 1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
             elif self.dir_face != 1:
@@ -83,8 +83,7 @@ class IDLE:
 
 class RUN:
     def enter(self, event):
-        print('ENTER RUN')
-        self.dir_Run_down = 0
+        # print('ENTER RUN')
         if event == RD:
             self.dir_x += 1
         elif event == LD:
@@ -97,15 +96,17 @@ class RUN:
             if self.dir_Run_y == 0:
                 self.dir_Run_y = 1
         elif event == DD and self.dir_Run_y == 0:
-            self.dir_Run_down += 1
+            self.dir_Run_down = 1
         elif event == DU and self.dir_Run_y == 0:
-            self.dir_Run_down -= 1
+            self.dir_Run_down = 0
 
     def exit(self, event):
-        print('EXIT RUN')
+        # print('EXIT RUN')
         self.dir_face = self.dir_x
         self.dir_Idle_y = self.dir_Run_y
         self.dir_Idle_down = self.dir_Run_down
+        # print(f'{self.dir_Run_down}')
+
         if event == SPACE:
             pass
             # self.THROW()
@@ -128,22 +129,22 @@ class RUN:
 
 
     def draw(self):
-        if self.dir_Run_y == 0 and self.dir_Run_down != 1:
+        if self.dir_Run_y == 0 and self.dir_Run_down == 0:
             if self.dir_x == -1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 6 * 100, 100, 99, self.x, self.y)
             elif self.dir_x == 1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 7 * 100, 100, 99, self.x, self.y)
-        elif self.dir_Run_y != 0 and self.dir_Run_down != 1:
-            if self.dir_x == -1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, self.x, self.y)
-            elif self.dir_x == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
         elif self.dir_Run_y == 0 and self.dir_Run_down == 1:
             # 테스트 이미지
             if self.dir_x == -1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, self.x, self.y)
             elif self.dir_x == 1:
                 Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, self.x, self.y)
+        elif self.dir_Run_y != 0 and self.dir_Run_down == 0:
+            if self.dir_x == -1:
+                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, self.x, self.y)
+            elif self.dir_x == 1:
+                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
 
 
 next_state = {
