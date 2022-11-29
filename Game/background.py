@@ -4,11 +4,15 @@ import game_framework
 
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
+
+life = [1, 2, 3]
+
 class Background:
     # background_1024x600 = None
     Cherry_Blossom_1280x720 = None
     Cherry_Blossom_floor = None
     hart = None
+    hart_minus = None
     font_item = None
     font_time = None
     ItemBox = None
@@ -23,6 +27,8 @@ class Background:
             Background.Cherry_Blossom_floor = load_image('Cherry_Blossom_floor_1280x100.png')
         if Background.hart == None:
             Background.hart = load_image('Hart.png')
+        if Background.hart_minus == None:
+            Background.hart_minus = load_image('Hart_Minus.png')
         if Background.font_item == None:
             Background.font_item = load_font('ENCR10B.TTF', 21)
         if Background.font_time == None:

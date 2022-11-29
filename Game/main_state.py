@@ -178,8 +178,8 @@ def test_self():
     os.chdir(path)
     hide_cursor()
 
-    # open_canvas(Width, Height)
-    open_canvas(800, 600)
+    open_canvas(Width, Height)
+    # open_canvas(800, 600)
     game_framework.run(main_state)
     close_canvas()
 

@@ -122,7 +122,7 @@ class RUN:
         self.y += self.dir_Run_y * RUN_SPEED_PPS * game_framework.frame_time
         # self.y += self.dir_Run_y * 5
         self.x = clamp(15, self.x, Width - 15)
-        if self.y > Height - bg_Height + 50 + 100 - 20:
+        if self.y > Height - bg_Height + 49 + 100 - 20:
             self.dir_Run_y = -1
         if self.y < Height - bg_Height + 49 - 20:
             self.dir_Run_y = 0
@@ -209,7 +209,16 @@ class Character:
         game_world.add_object(throw, 1)
 
     def get_bb(self):
-        return self.x - 16, self.y - 50, self.x + 16, self.y + 50
+        if self.cur_state == RUN:
+            if self.dir_Run_down != 1:
+                return self.x - 16, self.y - 50, self.x + 16, self.y + 50
+            else:
+                return self.x - 50, self.y - 48, self.x + 50, self.y - 16
+        elif self.cur_state == IDLE:
+            if self.dir_Idle_down != 1:
+                return self.x - 16, self.y - 50, self.x + 16, self.y + 50
+            else:
+                return self.x - 50, self.y - 48, self.x + 50, self.y - 16
 
     def handle_collision(self, other, group):
         pass
