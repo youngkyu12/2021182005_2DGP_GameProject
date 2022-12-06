@@ -12,7 +12,6 @@ def remove_object(o):
     for layer in objects:
         try:
             layer.remove(o)
-            # 충돌 그룹에서도 오브젝트를 지워야 한다.
             remove_collision_object(o)
             del o
             return
@@ -28,13 +27,13 @@ def all_objects():
 
 def clear():
     for o in all_objects():
+        remove_collision_object(o)
         del o
     for layer in objects:
         layer.clear()
 
 def add_collision_pairs(a, b, group):
     if group not in collision_group:
-        print('add new group')
         collision_group[group] = [[], []]
 
     if a:

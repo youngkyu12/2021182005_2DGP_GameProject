@@ -1,5 +1,5 @@
 import main_state
-
+from background import *
 
 class GameState:
     def __init__(self, state):
@@ -104,6 +104,9 @@ bug_time = 4.0
 soju_time = 4.0
 ppt_time = 4.0
 report_time = 4.0
+task_time = 0.0
+deadline_time = 9.0
+
 def run(start_state):
     global running, stack
     running = True
@@ -120,7 +123,7 @@ def run(start_state):
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
-        global frame_time, World_time, bug_time, soju_time, ppt_time, report_time
+        global frame_time, World_time, bug_time, soju_time, ppt_time, report_time, task_time, deadline_time
         frame_time = time.time() - current_time
         if stack[-1] == main_state:
             World_time = float(World_time) - frame_time
@@ -128,7 +131,10 @@ def run(start_state):
         soju_time += frame_time
         ppt_time += frame_time
         report_time += frame_time
-        frame_rate = 1 / frame_time
+        deadline_time += frame_time
+        if task:
+            task_time += frame_time * 16.0
+        # frame_rate = 1 / frame_time
         current_time += frame_time
         # print(f"Frame Time: {frame_time}, Frame Rate: {frame_rate}")
 

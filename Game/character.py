@@ -6,6 +6,8 @@ from throw import Throw
 Width, Height = 1280, 720
 bg_Width, bg_Height = 1024, 600
 
+import server
+import background
 # 60프레임 고정시켜보기
 
 # Charater Run Speed
@@ -64,22 +66,24 @@ class IDLE:
             self.dir_Idle_y = 0
 
     def draw(self):
+        sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
+
         if self.dir_Idle_y == 0 and self.dir_Idle_down == 0:
             if self.dir_face == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 3 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 3 * 100, 100, 99, sx, sy)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 2 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 2 * 100, 100, 99, sx, sy)
         elif self.dir_Idle_y != 0 and self.dir_Idle_down == 0:
             if self.dir_face == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, sx, sy)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, sx, sy)
         elif self.dir_Run_y == 0 and self.dir_Idle_down == 1:
             # 테스트 이미지
             if self.dir_face == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, sx, sy)
             elif self.dir_face != 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, sx, sy)
 
 class RUN:
     def enter(self, event):
@@ -101,27 +105,21 @@ class RUN:
             self.dir_Run_down = 0
 
     def exit(self, event):
-        # print('EXIT RUN')
         self.dir_face = self.dir_x
         self.dir_Idle_y = self.dir_Run_y
         self.dir_Idle_down = self.dir_Run_down
-        # print(f'{self.dir_Run_down}')
 
         if event == SPACE:
             pass
-            # self.THROW()
 
     def do(self):
-        # if self.dir_Run_y == 0:
-        # int(self.frame) = (int(self.frame) + 1) % 5
+
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
-        # elif self.dir_Run_y != 0:
-        #     int(self.frame) = 0
-        # self.x += self.dir_x * 5
         self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
         self.y += self.dir_Run_y * RUN_SPEED_PPS * game_framework.frame_time
-        # self.y += self.dir_Run_y * 5
-        self.x = clamp(15, self.x, Width - 15)
+        self.x = clamp(0 + 15, self.x, server.background.w - 1 - 15)
+
+
         if self.y > Height - bg_Height + 49 + 100 - 20:
             self.dir_Run_y = -1
         if self.y < Height - bg_Height + 49 - 20:
@@ -129,22 +127,24 @@ class RUN:
 
 
     def draw(self):
+        sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
+
         if self.dir_Run_y == 0 and self.dir_Run_down == 0:
             if self.dir_x == -1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 6 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 6 * 100, 100, 99, sx, sy)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 7 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 7 * 100, 100, 99, sx, sy)
         elif self.dir_Run_y == 0 and self.dir_Run_down == 1:
             # 테스트 이미지
             if self.dir_x == -1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 1 * 100, 100, 99, sx, sy)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 0 * 100, 100, 99, sx, sy)
         elif self.dir_Run_y != 0 and self.dir_Run_down == 0:
             if self.dir_x == -1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 5 * 100, 100, 99, sx, sy)
             elif self.dir_x == 1:
-                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, self.x, self.y)
+                Character.char_image.clip_draw(int(self.frame) * 100, 4 * 100, 100, 99, sx, sy)
 
 
 next_state = {
@@ -158,7 +158,7 @@ class Character:
     object_image = None
 
     def __init__(self):
-        self.x, self.y = Width - (bg_Width // 2) - 128 + 41, Height - bg_Height - 20 + 48
+        self.x, self.y = server.background.w // 2, server.background.h // 2 - 210
         self.frame = 0
         self.dir_face = 0
         self.dir_x = 0
@@ -191,7 +191,6 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
-        draw_rectangle(*self.get_bb())
         debug_print('PPPP')
         debug_print(f' Dir_x: {self.dir_x}, Dir_Idle_y: {self.dir_Idle_y}, Dir_Run_y: {self.dir_Run_y}')
 
@@ -204,21 +203,22 @@ class Character:
             self.add_event(key_event)
 
     def THROW(self):
-        print('THROW')
         throw = Throw(self.x, self.y, self.dir_face)
         game_world.add_object(throw, 1)
 
     def get_bb(self):
+        sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
+
         if self.cur_state == RUN:
             if self.dir_Run_down != 1:
-                return self.x - 16, self.y - 50, self.x + 16, self.y + 50
+                return sx - 16, sy - 50, sx + 16, sy + 50
             else:
-                return self.x - 50, self.y - 48, self.x + 50, self.y - 16
+                return sx - 50, sy - 48, sx + 50, sy - 16
         elif self.cur_state == IDLE:
             if self.dir_Idle_down != 1:
-                return self.x - 16, self.y - 50, self.x + 16, self.y + 50
+                return sx - 16, sy - 50, sx + 16, sy + 50
             else:
-                return self.x - 50, self.y - 48, self.x + 50, self.y - 16
+                return sx - 50, sy - 48, sx + 50, sy - 16
 
     def handle_collision(self, other, group):
         pass

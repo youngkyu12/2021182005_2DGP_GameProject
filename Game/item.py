@@ -1,7 +1,9 @@
 from pico2d import *
+
+import game_framework
 import game_world
 import main_state
-
+import background
 # 변수 이름을 의미를 파악하기 힘든 숫자를 쓰지 않기
 
 Width, Height = 1280, 720
@@ -18,7 +20,6 @@ class Item_shield:
 
     def draw(self):
         self.Shield.draw(self.x, self.y)
-        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
@@ -27,8 +28,10 @@ class Item_shield:
         pass
 
     def handle_collision(self, other, group):
-        # self.hart_plus.opacify(int(255*255.0)) # 임시 투명 적용
-        pass
+        if group == 'mouse::item_shield':
+            # print('shield')
+            background.shield_switch = True
+            game_world.remove_object(self)
 
     def get_bb(self):
         return self.x - 16, self.y - 16, self.x + 16, self.y + 16
@@ -44,7 +47,6 @@ class Item_task_clear:
 
     def draw(self):
         self.task_clear.draw(self.x, self.y)
-        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
@@ -53,8 +55,15 @@ class Item_task_clear:
         pass
 
     def handle_collision(self, other, group):
-        # self.task_clear.opacify(int(255*255.0)) # 임시 투명 적용
-        pass
+        if group == 'mouse::item_task_clear':
+            # print('task_clear')
+            background.task_clear_switch = True
+            while background.backpack:
+                if background.backpack.pop() == 'report':
+                    background.money += 100
+                elif background.backpack.pop() == 'ppt':
+                    background.money += 200
+            game_world.remove_object(self)
 
     def get_bb(self):
         return self.x - 16, self.y - 16, self.x + 16, self.y + 16
@@ -69,7 +78,6 @@ class Item_hart_plus:
 
     def draw(self):
         self.hart_plus.draw(self.x, self.y)
-        draw_rectangle(*self.get_bb())
 
     def pause(self):
         pass
@@ -78,9 +86,37 @@ class Item_hart_plus:
         pass
 
     def handle_collision(self, other, group):
-        # self.hart_plus.opacify(int(255*255.0)) # 임시 투명 적용
-        pass
+        if group == 'mouse::item_hart':
+            # print('hart')
+            for i in range(3):
+                if background.life[i]:
+                    background.life[i] = False
+            game_world.remove_object(self)
 
     def get_bb(self):
         return self.x - 16, self.y - 16, self.x + 16, self.y + 16
+
+class Door:
+    def __init__(self):
+        self.x, self.y = Width - 128, Height - bg_Height + 64
+        self.door = load_image("door.png")
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.door.draw(self.x, self.y)
+
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass
+
+    def handle_collision(self, other, group):
+        if group == 'mouse::door':
+            game_framework.change_state(main_state)
+
+    def get_bb(self):
+        return self.x - 32, self.y - 32, self.x + 32, self.y + 32
 
